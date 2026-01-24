@@ -11,10 +11,8 @@
     "v2ray-tools": "./src/cli.js"
   },
   "dependencies": {
-    "axios": "^0.19.0",
     "immer": "^4.0.1",
     "js-base64": "^2.5.1",
-    "socks-proxy-agent": "^4.0.2",
     "yargs": "^14.2.0"
   },
   "devDependencies": {},
