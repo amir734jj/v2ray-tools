@@ -27,7 +27,7 @@ v2ray-tools vmess2config
 convert vmess url into v2ray config
 
 Options:
-  --base     base v2ray config file path              [default: "src/base.json"]
+  --base     base v2ray config file path              [default: "assets/base.json"]
   --url      vmess url                                                [required]
   --port     port for listen                           [number] [default: 10800]
   --listen   listen interface

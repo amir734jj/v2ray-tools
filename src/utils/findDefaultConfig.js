@@ -24,7 +24,7 @@ function findDefaultConfig() {
   const configPath = './base.json';
   const files = [
     path.resolve(process.cwd(), configPath),
-    path.resolve(__dirname, '..', configPath),
+    path.resolve(__dirname, '..', '..', 'assets', 'base.json'),
   ];
   return findFirstExistFile(files);
 }
