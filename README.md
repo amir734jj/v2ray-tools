@@ -1,7 +1,7 @@
 V2Ray Tools
 ====
 
-Installaction
+Installation
 ----
 ```shell
 npm -g install v2ray-tools
@@ -9,6 +9,11 @@ npm -g install v2ray-tools
 
 Usage
 ----
+
+### Global Installation
+
+After installing globally, use the CLI directly:
+
 ```shell
 v2ray-tools [command]
 
@@ -21,10 +26,34 @@ Options:
   --help     Show help                                                 [boolean]
 ```
 
+### Local Development
+
+For local development, use npm scripts:
+
 ```shell
-v2ray-tools vmess2config
+# Show help
+npm run cli -- --help
+
+# Convert vmess URL to config
+npm run vmess2config -- --url <vmess-url>
+
+# Convert config to vmess URL
+npm run config2vmess -- --path <config-path>
+```
+
+### Commands
+
+#### vmess2config
 
 convert vmess url into v2ray config
+
+```shell
+# Global
+v2ray-tools vmess2config --url <vmess-url> [options]
+
+# Local
+npm run vmess2config -- --url <vmess-url> [options]
+```
 
 Options:
   --base     base v2ray config file path              [default: "assets/base.json"]
@@ -33,10 +62,17 @@ Options:
   --listen   listen interface
 ```
 
-```shell
-v2ray-tools config2vmess
+#### config2vmess
 
 convert v2ray config file into vmess url
+
+```shell
+# Global
+v2ray-tools config2vmess --path <config-path>
+
+# Local
+npm run config2vmess -- --path <config-path>
+```
 
 Options:
   --version  Show version number                                       [boolean]
