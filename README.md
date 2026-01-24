@@ -55,12 +55,11 @@ v2ray-tools vmess2config --url <vmess-url> [options]
 npm run vmess2config -- --url <vmess-url> [options]
 ```
 
-Options:
-  --base     base v2ray config file path              [default: "assets/base.json"]
-  --url      vmess url                                                [required]
-  --port     port for listen                           [number] [default: 10800]
-  --listen   listen interface
-```
+**Options:**
+- `--base` - base v2ray config file path (default: "assets/base.json")
+- `--url` - vmess url (required)
+- `--port` - port for listen (default: 10800)
+- `--listen` - listen interface
 
 #### config2vmess
 
@@ -74,9 +73,8 @@ v2ray-tools config2vmess --path <config-path>
 npm run config2vmess -- --path <config-path>
 ```
 
-Options:
-  --version  Show version number                                       [boolean]
-  --help     Show help                                                 [boolean]
-  --path     the path for the v2ray config file                       [required]
-```
+**Options:**
+- `--path` - the path for the v2ray config file (required)
+- `--version` - show version number
+- `--help` - show help
 
