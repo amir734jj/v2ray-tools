@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-const findDefaultConfig = require('../utils/findDefaultConfig');
+import yargs from 'yargs';
+import { findDefaultConfig, vmess2config, config2vmess } from '../utils';
 
 function vmess2ConfigArgs(yargs) {
   return yargs
@@ -31,18 +32,16 @@ function config2VmessArgs(yargs) {
 }
 
 function vmess2ConfigHandler(argv) {
-  const vmess2config = require('../utils/vmess2config');
   const config = vmess2config(argv);
   console.log(JSON.stringify(config, '', 2));
 }
 
 function config2VmessHandler(argv){
-  const config2vmess = require('../utils/config2vmess');
   const vmessUrl = config2vmess(argv);
   console.log(vmessUrl);
 }
 
-require('yargs')
+yargs(process.argv.slice(2))
   .command(
     'vmess2config',
     'convert vmess url into v2ray config',

@@ -1,6 +1,11 @@
-const fs = require('fs');
-const path = require('path');
-const process = require('process');
+import fs from 'fs';
+import path from 'path';
+import process from 'process';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 function findFirstExistFile(files) {
   if (!files || !files.length) return undefined;
@@ -24,4 +29,4 @@ function findDefaultConfig() {
   return findFirstExistFile(files);
 }
 
-module.exports = findDefaultConfig;
+export default findDefaultConfig;

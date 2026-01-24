@@ -1,5 +1,8 @@
-const path = require('path')
-const { Base64 } = require('js-base64');
+import path from 'path';
+import { Base64 } from 'js-base64';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 
 
 const VMESS_PROTO = 'vmess://';
@@ -90,8 +93,7 @@ function createEncodedUrl(config) {
   } else return new Error("only vmess protocol URLs are supported");
 }
 
-
-module.exports = function config2vmess({ path: filePath }) {
+export default function config2vmess({ path: filePath }) {
   try {
     const absolute = path.resolve(process.cwd(), filePath);
     const config = require(absolute);

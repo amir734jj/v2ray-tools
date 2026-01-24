@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 
-const { Base64 } = require('js-base64');
+import { Base64 } from 'js-base64';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 
 function streamSettings(config, data) {
   config.network = data.net;
@@ -76,4 +79,4 @@ function vmess2config({ base, url, port, listen }) {
   return config;
 }
 
-module.exports = vmess2config;
+export default vmess2config;
