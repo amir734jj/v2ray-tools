@@ -1,57 +1,39 @@
 #!/usr/bin/env node
 
-import yargs from 'yargs';
-import { findDefaultConfig, vmess2config, config2vmess } from '../utils';
+import { Command } from 'commander';
+import { findDefaultConfig, vmess2config, config2vmess } from '../utils/index.js';
 
-function vmess2ConfigArgs(yargs) {
-  return yargs
-    .option('base', {
-      default: findDefaultConfig(),
-      describe: 'base v2ray config file path',
-    })
-    .option('url', {
-      describe: 'vmess url',
-      demandOption: true,
-    })
-    .option('port', {
-      type: 'number',
-      default: 10800,
-      describe: 'port for listen',
-    })
-    .option('listen', {
-      describe: 'listen interface',
+const program = new Command();
+
+program
+  .name('v2ray-tools')
+  .description('v2ray tools for vmess url and config conversion')
+  .version('0.2.1');
+
+program
+  .command('vmess2config')
+  .description('convert vmess url into v2ray config')
+  .requiredOption('-u, --url <url>', 'vmess url')
+  .option('-b, --base <path>', 'base v2ray config file path', findDefaultConfig())
+  .option('-p, --port <number>', 'port for listen', '10800')
+  .option('-l, --listen <interface>', 'listen interface')
+  .action((options) => {
+    const config = vmess2config({
+      url: options.url,
+      base: options.base,
+      port: parseInt(options.port),
+      listen: options.listen
     });
-}
+    console.log(JSON.stringify(config, '', 2));
+  });
 
-function config2VmessArgs(yargs) {
-  return yargs
-    .option('path', {
-      describe: 'the path for the v2ray config file',
-      demandOption: true
-    })
-}
+program
+  .command('config2vmess')
+  .description('convert v2ray config file into vmess url')
+  .requiredOption('-p, --path <path>', 'the path for the v2ray config file')
+  .action((options) => {
+    const vmessUrl = config2vmess({ path: options.path });
+    console.log(vmessUrl);
+  });
 
-function vmess2ConfigHandler(argv) {
-  const config = vmess2config(argv);
-  console.log(JSON.stringify(config, '', 2));
-}
-
-function config2VmessHandler(argv){
-  const vmessUrl = config2vmess(argv);
-  console.log(vmessUrl);
-}
-
-yargs(process.argv.slice(2))
-  .command(
-    'vmess2config',
-    'convert vmess url into v2ray config',
-    vmess2ConfigArgs,
-    vmess2ConfigHandler,
-  )
-  .command(
-    'config2vmess',
-    'convert v2ray config file into vmess url',
-    config2VmessArgs,
-    config2VmessHandler,
-  )
-  .help().argv;
+program.parse();

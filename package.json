@@ -12,8 +12,8 @@
     "v2ray-tools": "./src/cli/index.js"
   },
   "dependencies": {
-    "js-base64": "^2.5.1",
-    "yargs": "^14.2.0"
+    "commander": "^12.0.0",
+    "js-base64": "^2.5.1"
   },
   "devDependencies": {},
   "scripts": {
