@@ -1,5 +1,4 @@
 import path from 'path';
-import { Base64 } from 'js-base64';
 import { createRequire } from 'module';
 
 const require = createRequire(import.meta.url);
@@ -88,7 +87,7 @@ function createEncodedUrl(config) {
   if (outbound.protocol === 'vmess') {
     const vmessObj = createVmessObj(outbound);
     const jsoned = JSON.stringify(vmessObj, null, 2);
-    const encodedString = Base64.encode(jsoned)
+    const encodedString = Buffer.from(jsoned).toString('base64');
     return `${VMESS_PROTO}${encodedString}`;
   } else return new Error("only vmess protocol URLs are supported");
 }

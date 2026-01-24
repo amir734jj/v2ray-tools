@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import { Base64 } from 'js-base64';
 import { createRequire } from 'module';
 
 const require = createRequire(import.meta.url);
@@ -60,7 +59,7 @@ function outbound(config, data) {
 function parseVMess(url) {
   if (!url) return;
   if (!url.startsWith('vmess://')) return;
-  const vmDec = Base64.decode(url.slice(8));
+  const vmDec = Buffer.from(url.slice(8), 'base64').toString('utf8');
   if (!vmDec) return;
 
   return { protocol: 'vmess', ...JSON.parse(vmDec) };

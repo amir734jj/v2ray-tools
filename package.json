@@ -12,10 +12,8 @@
     "v2ray-tools": "./src/cli/index.js"
   },
   "dependencies": {
-    "commander": "^12.0.0",
-    "js-base64": "^2.5.1"
+    "commander": "^12.0.0"
   },
-  "devDependencies": {},
   "scripts": {
     "cli": "node src/cli/index.js",
     "vmess2config": "node src/cli/index.js vmess2config",
