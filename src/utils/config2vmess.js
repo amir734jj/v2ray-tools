@@ -38,7 +38,8 @@ function streamSettingsReverse(config) {
     const { tcpSettings } = config;
     if (tcpSettings && tcpSettings.header && tcpSettings.header.type === 'http') {
       type = tcpSettings.header.type;
-      host = tcpSettings.header.request.headers.Host
+      const hostHeader = tcpSettings.header.request.headers.Host;
+      host = Array.isArray(hostHeader) ? hostHeader[0] : hostHeader;
       path = tcpSettings.header.request.path[0]
     }
   }
@@ -60,6 +61,7 @@ function createVmessObj(outboundConfig) {
   const [user] = vnext?.users;
   const id = user?.id;
   const aid = user?.alterId;
+  const scy = user?.security || 'auto';
   const { net, tls, host, type, path } = streamSettingsReverse(streamSettings);
 
   // the reason for casting out "none" here is that v2ray configs are strict
@@ -68,14 +70,15 @@ function createVmessObj(outboundConfig) {
     v: "2",
     ps: tag || "none",
     add: address || "none",
-    port: Number(port) || 0,
-    id: id || 0,
-    aid: aid || 0,
+    port: String(port || 0),
+    id: id || "0",
+    aid: String(aid || 0),
     net: net || "none",
     type: type || "none",
     host: host || "",
     path: path || "none",
     tls: tls || "none",
+    scy: scy
   }
 
   return obj;
@@ -86,7 +89,7 @@ function createEncodedUrl(config) {
   const [outbound] = config.outbounds;
   if (outbound.protocol === 'vmess') {
     const vmessObj = createVmessObj(outbound);
-    const jsoned = JSON.stringify(vmessObj, null, 2);
+    const jsoned = JSON.stringify(vmessObj);
     const encodedString = Buffer.from(jsoned).toString('base64');
     return `${VMESS_PROTO}${encodedString}`;
   } else return new Error("only vmess protocol URLs are supported");

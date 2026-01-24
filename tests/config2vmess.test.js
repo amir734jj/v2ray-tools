@@ -49,9 +49,9 @@ test('config2vmess - should convert v2ray config to vmess URL', () => {
     const decoded = JSON.parse(Buffer.from(base64Part, 'base64').toString());
     
     assert.strictEqual(decoded.add, 'example.com', 'Address should match');
-    assert.strictEqual(decoded.port, 443, 'Port should match');
+    assert.strictEqual(decoded.port, '443', 'Port should match');
     assert.strictEqual(decoded.id, 'test-uuid-1234', 'ID should match');
-    assert.strictEqual(decoded.aid, 0, 'AlterId should match');
+    assert.strictEqual(decoded.aid, '0', 'AlterId should match');
     assert.strictEqual(decoded.net, 'tcp', 'Network should match');
     assert.strictEqual(decoded.tls, 'tls', 'TLS should match');
   } finally {
