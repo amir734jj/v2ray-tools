@@ -78,3 +78,7 @@ npm run config2vmess -- --path <config-path>
 - `--version` - show version number
 - `--help` - show help
 
+## Credits
+
+Special thanks to [@AliSawari](https://github.com/AliSawari) for their fix PR: [#18](https://github.com/kltk/v2ray-tools/pull/18)
+
