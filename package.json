@@ -8,7 +8,7 @@
     "url": "https://github.com/kltk/v2ray-tools.git"
   },
   "bin": {
-    "v2ray-tools": "./src/cli.js"
+    "v2ray-tools": "./src/cli/index.js"
   },
   "dependencies": {
     "js-base64": "^2.5.1",
