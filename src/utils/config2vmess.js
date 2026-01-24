@@ -100,7 +100,8 @@ export default function config2vmess({ path: filePath }) {
     const encoded = createEncodedUrl(config);
     return encoded;
   } catch (e) {
-    console.log(e)
+    // Silently return false for invalid paths in production
+    // console.log(e)
     return false;
   }
 }

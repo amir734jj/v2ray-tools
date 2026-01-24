@@ -20,7 +20,7 @@
     "cli": "node src/cli/index.js",
     "vmess2config": "node src/cli/index.js vmess2config",
     "config2vmess": "node src/cli/index.js config2vmess",
-    "test": "echo \"Error: no test specified\""
+    "test": "node --test tests/**/*.test.js"
   },
   "keywords": [
     "v2ray",
