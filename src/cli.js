@@ -42,31 +42,12 @@ function config2VmessHandler(argv){
   console.log(vmessUrl);
 }
 
-function vmessTestArgs(yargs) {
-  return vmess2ConfigArgs(yargs)
-    .array('url')
-    .describe('port', 'base port for listen')
-    .default('test-url', 'https://www.google.com')
-    .default('v2ray-path', 'v2ray');
-}
-
-function vmessTestHandler({ url, ...argv }) {
-  const vmessTest = require('./vmessTest');
-  vmessTest({ urls: url, ...argv });
-}
-
 require('yargs')
   .command(
     'vmess2config',
     'convert vmess url into v2ray config',
     vmess2ConfigArgs,
     vmess2ConfigHandler,
-  )
-  .command(
-    'vmesstest',
-    'test avaliability for server from url',
-    vmessTestArgs,
-    vmessTestHandler,
   )
   .command(
     'config2vmess',

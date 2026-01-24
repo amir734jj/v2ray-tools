@@ -1,7 +1,7 @@
 {
   "name": "v2ray-tools",
   "version": "0.2.1",
-  "description": "v2ray tools, convert vmess url into v2ray config, vmess url test",
+  "description": "v2ray tools, convert vmess url into v2ray config",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -26,8 +26,7 @@
     "vmess",
     "tools",
     "utils",
-    "config",
-    "test"
+    "config"
   ],
   "author": "kltk <haig8@msn.com>",
   "license": "MIT"
