@@ -9,7 +9,7 @@ import config2vmess from '../src/utils/config2vmess.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-test('config2vmess - should convert v2ray config to vmess URL', () => {
+test('config2vmess - should convert v2ray config to vmess URL', async () => {
   const testConfig = {
     outbounds: [{
       protocol: 'vmess',
@@ -39,7 +39,7 @@ test('config2vmess - should convert v2ray config to vmess URL', () => {
   writeFileSync(configPath, JSON.stringify(testConfig, null, 2));
   
   try {
-    const vmessUrl = config2vmess({ path: configPath });
+    const vmessUrl = await config2vmess({ path: configPath });
     
     assert.ok(vmessUrl, 'Should return vmess URL');
     assert.ok(vmessUrl.startsWith('vmess://'), 'URL should start with vmess://');
@@ -59,7 +59,7 @@ test('config2vmess - should convert v2ray config to vmess URL', () => {
   }
 });
 
-test('config2vmess - should handle websocket configuration', () => {
+test('config2vmess - should handle websocket configuration', async () => {
   const testConfig = {
     outbounds: [{
       protocol: 'vmess',
@@ -95,7 +95,7 @@ test('config2vmess - should handle websocket configuration', () => {
   writeFileSync(configPath, JSON.stringify(testConfig, null, 2));
   
   try {
-    const vmessUrl = config2vmess({ path: configPath });
+    const vmessUrl = await config2vmess({ path: configPath });
     const base64Part = vmessUrl.slice(8);
     const decoded = JSON.parse(Buffer.from(base64Part, 'base64').toString());
     
@@ -107,7 +107,7 @@ test('config2vmess - should handle websocket configuration', () => {
   }
 });
 
-test('config2vmess - should handle h2 configuration', () => {
+test('config2vmess - should handle h2 configuration', async () => {
   const testConfig = {
     outbounds: [{
       protocol: 'vmess',
@@ -138,7 +138,7 @@ test('config2vmess - should handle h2 configuration', () => {
   writeFileSync(configPath, JSON.stringify(testConfig, null, 2));
   
   try {
-    const vmessUrl = config2vmess({ path: configPath });
+    const vmessUrl = await config2vmess({ path: configPath });
     const base64Part = vmessUrl.slice(8);
     const decoded = JSON.parse(Buffer.from(base64Part, 'base64').toString());
     
@@ -150,7 +150,7 @@ test('config2vmess - should handle h2 configuration', () => {
   }
 });
 
-test('config2vmess - should extract tag name correctly', () => {
+test('config2vmess - should extract tag name correctly', async () => {
   const testConfig = {
     outbounds: [{
       protocol: 'vmess',
@@ -176,7 +176,7 @@ test('config2vmess - should extract tag name correctly', () => {
   writeFileSync(configPath, JSON.stringify(testConfig, null, 2));
   
   try {
-    const vmessUrl = config2vmess({ path: configPath });
+    const vmessUrl = await config2vmess({ path: configPath });
     const base64Part = vmessUrl.slice(8);
     const decoded = JSON.parse(Buffer.from(base64Part, 'base64').toString());
     
@@ -186,7 +186,7 @@ test('config2vmess - should extract tag name correctly', () => {
   }
 });
 
-test('config2vmess - should return false for invalid config path', () => {
-  const result = config2vmess({ path: '/nonexistent/path/config.json' });
+test('config2vmess - should return false for invalid config path', async () => {
+  const result = await config2vmess({ path: '/nonexistent/path/config.json' });
   assert.strictEqual(result, false, 'Should return false for invalid path');
 });

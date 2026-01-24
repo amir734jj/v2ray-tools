@@ -7,7 +7,7 @@ import vmess2config from '../src/utils/vmess2config.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-test('vmess2config - should parse valid vmess URL and generate config', () => {
+test('vmess2config - should parse valid vmess URL and generate config', async () => {
   // Valid vmess URL (base64 encoded JSON)
   const vmessData = {
     v: "2",
@@ -26,7 +26,7 @@ test('vmess2config - should parse valid vmess URL and generate config', () => {
   const vmessUrl = 'vmess://' + Buffer.from(JSON.stringify(vmessData)).toString('base64');
   const baseConfigPath = join(__dirname, '..', 'assets', 'base.json');
   
-  const config = vmess2config({
+  const config = await vmess2config({
     url: vmessUrl,
     base: baseConfigPath,
     port: 1080,
@@ -47,7 +47,7 @@ test('vmess2config - should parse valid vmess URL and generate config', () => {
   assert.ok(outbound.tag.includes('test-server'), 'Tag should include server name');
 });
 
-test('vmess2config - should handle default port', () => {
+test('vmess2config - should handle default port', async () => {
   const vmessData = {
     v: "2",
     ps: "test",
@@ -65,7 +65,7 @@ test('vmess2config - should handle default port', () => {
   const vmessUrl = 'vmess://' + Buffer.from(JSON.stringify(vmessData)).toString('base64');
   const baseConfigPath = join(__dirname, '..', 'assets', 'base.json');
   
-  const config = vmess2config({
+  const config = await vmess2config({
     url: vmessUrl,
     base: baseConfigPath
   });
@@ -73,7 +73,7 @@ test('vmess2config - should handle default port', () => {
   assert.ok(config.inbounds[0].port, 'Should have default port');
 });
 
-test('vmess2config - should handle websocket settings', () => {
+test('vmess2config - should handle websocket settings', async () => {
   const vmessData = {
     v: "2",
     ps: "ws-server",
@@ -91,7 +91,7 @@ test('vmess2config - should handle websocket settings', () => {
   const vmessUrl = 'vmess://' + Buffer.from(JSON.stringify(vmessData)).toString('base64');
   const baseConfigPath = join(__dirname, '..', 'assets', 'base.json');
   
-  const config = vmess2config({
+  const config = await vmess2config({
     url: vmessUrl,
     base: baseConfigPath,
     port: 1080
@@ -104,7 +104,7 @@ test('vmess2config - should handle websocket settings', () => {
   assert.strictEqual(outbound.streamSettings.security, 'tls', 'Security should be tls');
 });
 
-test('vmess2config - should not modify base config file', () => {
+test('vmess2config - should not modify base config file', async () => {
   const vmessData = {
     v: "2",
     ps: "test",
@@ -122,13 +122,13 @@ test('vmess2config - should not modify base config file', () => {
   const vmessUrl = 'vmess://' + Buffer.from(JSON.stringify(vmessData)).toString('base64');
   const baseConfigPath = join(__dirname, '..', 'assets', 'base.json');
   
-  const config1 = vmess2config({
+  const config1 = await vmess2config({
     url: vmessUrl,
     base: baseConfigPath,
     port: 1080
   });
   
-  const config2 = vmess2config({
+  const config2 = await vmess2config({
     url: vmessUrl,
     base: baseConfigPath,
     port: 2080

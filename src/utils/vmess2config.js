@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 
-import { createRequire } from 'module';
-
-const require = createRequire(import.meta.url);
+import { readFile } from 'fs/promises';
 
 function streamSettings(config, data) {
   config.network = data.net;
@@ -65,8 +63,9 @@ function parseVMess(url) {
   return { protocol: 'vmess', ...JSON.parse(vmDec) };
 }
 
-function vmess2config({ base, url, port, listen }) {
-  const baseConfig = require(base);
+async function vmess2config({ base, url, port, listen }) {
+  const baseContent = await readFile(base, 'utf8');
+  const baseConfig = JSON.parse(baseContent);
   const config = JSON.parse(JSON.stringify(baseConfig));
   const data = parseVMess(url);
 

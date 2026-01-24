@@ -1,7 +1,5 @@
 import path from 'path';
-import { createRequire } from 'module';
-
-const require = createRequire(import.meta.url);
+import { readFile } from 'fs/promises';
 
 
 const VMESS_PROTO = 'vmess://';
@@ -95,10 +93,11 @@ function createEncodedUrl(config) {
   } else return new Error("only vmess protocol URLs are supported");
 }
 
-export default function config2vmess({ path: filePath }) {
+export default async function config2vmess({ path: filePath }) {
   try {
     const absolute = path.resolve(process.cwd(), filePath);
-    const config = require(absolute);
+    const configContent = await readFile(absolute, 'utf8');
+    const config = JSON.parse(configContent);
     const encoded = createEncodedUrl(config);
     return encoded;
   } catch (e) {

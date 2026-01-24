@@ -17,8 +17,8 @@ program
   .option('-b, --base <path>', 'base v2ray config file path', findDefaultConfig())
   .option('-p, --port <number>', 'port for listen', '10800')
   .option('-l, --listen <interface>', 'listen interface')
-  .action((options) => {
-    const config = vmess2config({
+  .action(async (options) => {
+    const config = await vmess2config({
       url: options.url,
       base: options.base,
       port: parseInt(options.port),
@@ -31,8 +31,8 @@ program
   .command('config2vmess')
   .description('convert v2ray config file into vmess url')
   .requiredOption('-p, --path <path>', 'the path for the v2ray config file')
-  .action((options) => {
-    const vmessUrl = config2vmess({ path: options.path });
+  .action(async (options) => {
+    const vmessUrl = await config2vmess({ path: options.path });
     console.log(vmessUrl);
   });
 
