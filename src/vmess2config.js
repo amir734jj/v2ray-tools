@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 const { Base64 } = require('js-base64');
-const { default: produce } = require('immer');
 
 function streamSettings(config, data) {
   config.network = data.net;
@@ -66,14 +65,15 @@ function parseVMess(url) {
 
 function vmess2config({ base, url, port, listen }) {
   const baseConfig = require(base);
-  return produce(baseConfig, config => {
-    const data = parseVMess(url);
+  const config = JSON.parse(JSON.stringify(baseConfig));
+  const data = parseVMess(url);
 
-    const [inbound] = config.inbounds;
-    if (port) inbound.port = port;
-    if (listen) inbound.listen = listen;
-    outbound(config.outbounds[0], data);
-  });
+  const [inbound] = config.inbounds;
+  if (port) inbound.port = port;
+  if (listen) inbound.listen = listen;
+  outbound(config.outbounds[0], data);
+  
+  return config;
 }
 
 module.exports = vmess2config;
