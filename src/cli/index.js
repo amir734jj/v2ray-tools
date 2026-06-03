@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
-import { findDefaultConfig, vmess2config, config2vmess } from '../utils/index.js';
+import { findDefaultConfig, vmess2config, config2vmess, config2vless, config2trojan } from '../utils/index.js';
 
 const program = new Command();
 
@@ -34,6 +34,28 @@ program
   .action(async (options) => {
     const vmessUrl = await config2vmess({ path: options.path });
     console.log(vmessUrl);
+  });
+
+program
+  .command('config2vless')
+  .description('convert v2ray server config file into vless share url')
+  .requiredOption('-p, --path <path>', 'the path for the v2ray server config file')
+  .option('-t, --tag <tag>', 'inbound tag to select (defaults to first vless inbound)')
+  .action(async (options) => {
+    const vlessUrl = await config2vless({ path: options.path, inboundTag: options.tag });
+    if (!vlessUrl) { console.error('Failed to generate VLESS url'); process.exit(1); }
+    console.log(vlessUrl);
+  });
+
+program
+  .command('config2trojan')
+  .description('convert v2ray server config file into trojan share url')
+  .requiredOption('-p, --path <path>', 'the path for the v2ray server config file')
+  .option('-t, --tag <tag>', 'inbound tag to select (defaults to first trojan inbound)')
+  .action(async (options) => {
+    const trojanUrl = await config2trojan({ path: options.path, inboundTag: options.tag });
+    if (!trojanUrl) { console.error('Failed to generate Trojan url'); process.exit(1); }
+    console.log(trojanUrl);
   });
 
 program.parse();
