@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
-import { findDefaultConfig, vmess2config, config2vmess, config2vless, config2trojan } from '../utils/index.js';
+import { findDefaultConfig, vmess2config, vless2config, trojan2config, config2vmess, config2vless, config2trojan } from '../utils/index.js';
 
 const program = new Command();
 
 program
   .name('v2ray-tools')
-  .description('v2ray tools for vmess url and config conversion')
-  .version('0.2.1');
+  .description('v2ray tools for vmess/vless/trojan url and config conversion')
+  .version('0.3.0');
 
 program
   .command('vmess2config')
@@ -56,6 +56,42 @@ program
     const trojanUrl = await config2trojan({ path: options.path, inboundTag: options.tag });
     if (!trojanUrl) { console.error('Failed to generate Trojan url'); process.exit(1); }
     console.log(trojanUrl);
+  });
+
+program
+  .command('vless2config')
+  .description('convert vless share url into v2ray client config')
+  .requiredOption('-u, --url <url>', 'vless share url')
+  .option('-b, --base <path>', 'base v2ray config file path')
+  .option('-p, --port <number>', 'port for listen', '10800')
+  .option('-l, --listen <interface>', 'listen interface')
+  .action(async (options) => {
+    const config = await vless2config({
+      url: options.url,
+      base: options.base,
+      port: parseInt(options.port),
+      listen: options.listen
+    });
+    if (!config) { console.error('Failed to convert VLESS url'); process.exit(1); }
+    console.log(JSON.stringify(config, '', 2));
+  });
+
+program
+  .command('trojan2config')
+  .description('convert trojan share url into v2ray client config')
+  .requiredOption('-u, --url <url>', 'trojan share url')
+  .option('-b, --base <path>', 'base v2ray config file path')
+  .option('-p, --port <number>', 'port for listen', '10800')
+  .option('-l, --listen <interface>', 'listen interface')
+  .action(async (options) => {
+    const config = await trojan2config({
+      url: options.url,
+      base: options.base,
+      port: parseInt(options.port),
+      listen: options.listen
+    });
+    if (!config) { console.error('Failed to convert Trojan url'); process.exit(1); }
+    console.log(JSON.stringify(config, '', 2));
   });
 
 program.parse();

@@ -1,7 +1,7 @@
 {
   "name": "v2ray-tools",
-  "version": "0.2.1",
-  "description": "v2ray tools, convert vmess url into v2ray config",
+  "version": "0.3.0",
+  "description": "v2ray tools — convert between vmess/vless/trojan URLs and v2ray config files",
   "type": "module",
   "main": "index.js",
   "repository": {
@@ -18,14 +18,22 @@
     "cli": "node src/cli/index.js",
     "vmess2config": "node src/cli/index.js vmess2config",
     "config2vmess": "node src/cli/index.js config2vmess",
-    "test": "node --test tests/*.test.js"
+    "config2vless": "node src/cli/index.js config2vless",
+    "config2trojan": "node src/cli/index.js config2trojan",
+    "vless2config": "node src/cli/index.js vless2config",
+    "trojan2config": "node src/cli/index.js trojan2config",
+    "test": "node --test tests/config2vmess.test.js tests/config2vless.test.js tests/config2trojan.test.js tests/vless2config.test.js tests/trojan2config.test.js tests/vmess2config.test.js tests/findDefaultConfig.test.js"
   },
   "keywords": [
     "v2ray",
+    "xray",
     "vmess",
+    "vless",
+    "trojan",
     "tools",
     "utils",
-    "config"
+    "config",
+    "share-url"
   ],
   "author": "kltk <haig8@msn.com>",
   "license": "MIT"

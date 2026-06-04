@@ -1,0 +1,27 @@
+{
+  "inbounds": [
+    {
+      "tag": "vless-4556",
+      "listen": "0.0.0.0",
+      "port": 4556,
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "00000000-0000-0000-0000-000000000000"
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "none"
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom"
+    }
+  ]
+}

@@ -124,6 +124,54 @@ npm run cli -- config2trojan --path <server-config-path>
 trojan://password@1.2.3.4:7236?type=tcp&security=none#trojan-7236
 ```
 
+#### vless2config
+
+Convert a VLESS share URL into a v2ray **client** config. Supports TCP, WebSocket,
+gRPC, H2, TLS, and REALITY stream settings.
+
+```shell
+# Global
+v2ray-tools vless2config --url <vless-url> [options]
+
+# Local
+npm run vless2config -- --url <vless-url>
+```
+
+**Options:**
+- `--url`    - VLESS share URL (required)
+- `--base`   - base v2ray config file path (optional)
+- `--port`   - local SOCKS port (default: 10800)
+- `--listen` - local listen interface
+
+**Example:**
+```shell
+v2ray-tools vless2config --url "vless://uuid@1.2.3.4:443?type=tcp&security=none&encryption=none#my-vless"
+```
+
+#### trojan2config
+
+Convert a Trojan share URL into a v2ray **client** config. Supports TCP, WebSocket,
+gRPC, H2, and TLS stream settings.
+
+```shell
+# Global
+v2ray-tools trojan2config --url <trojan-url> [options]
+
+# Local
+npm run trojan2config -- --url <trojan-url>
+```
+
+**Options:**
+- `--url`    - Trojan share URL (required)
+- `--base`   - base v2ray config file path (optional)
+- `--port`   - local SOCKS port (default: 10800)
+- `--listen` - local listen interface
+
+**Example:**
+```shell
+v2ray-tools trojan2config --url "trojan://password@1.2.3.4:443?type=tcp&security=tls#my-trojan"
+```
+
 ## Credits
 
 Special thanks to [@AliSawari](https://github.com/AliSawari) for their fix PR: [#18](https://github.com/kltk/v2ray-tools/pull/18)
