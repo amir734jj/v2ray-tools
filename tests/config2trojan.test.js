@@ -114,3 +114,25 @@ test('config2trojan - returns false when no trojan inbound', async () => {
     unlinkSync(p);
   }
 });
+
+test('config2trojan - address override replaces listen in URL', async () => {
+  const cfg = {
+    inbounds: [{
+      tag: 'trojan-in',
+      listen: '0.0.0.0',
+      port: 7236,
+      protocol: 'trojan',
+      settings: { clients: [{ password: 'addr-pass' }] },
+      streamSettings: { network: 'tcp', security: 'none' }
+    }]
+  };
+  const p = makeTempConfig(cfg);
+  try {
+    const url = await config2trojan({ path: p, address: 'my.server.com' });
+    assert.ok(url.includes('my.server.com:7236'), 'Should use address override');
+    assert.ok(!url.includes('YOUR_SERVER_IP'), 'Should not contain placeholder');
+    assert.ok(!url.includes('0.0.0.0'), 'Should not contain 0.0.0.0');
+  } finally {
+    unlinkSync(p);
+  }
+});

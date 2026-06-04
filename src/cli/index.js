@@ -41,8 +41,9 @@ program
   .description('convert v2ray server config file into vless share url')
   .requiredOption('-p, --path <path>', 'the path for the v2ray server config file')
   .option('-t, --tag <tag>', 'inbound tag to select (defaults to first vless inbound)')
+  .option('-a, --address <address>', 'server address override (default: uses inbound listen)')
   .action(async (options) => {
-    const vlessUrl = await config2vless({ path: options.path, inboundTag: options.tag });
+    const vlessUrl = await config2vless({ path: options.path, inboundTag: options.tag, address: options.address });
     if (!vlessUrl) { console.error('Failed to generate VLESS url'); process.exit(1); }
     console.log(vlessUrl);
   });
@@ -52,8 +53,9 @@ program
   .description('convert v2ray server config file into trojan share url')
   .requiredOption('-p, --path <path>', 'the path for the v2ray server config file')
   .option('-t, --tag <tag>', 'inbound tag to select (defaults to first trojan inbound)')
+  .option('-a, --address <address>', 'server address override (default: uses inbound listen)')
   .action(async (options) => {
-    const trojanUrl = await config2trojan({ path: options.path, inboundTag: options.tag });
+    const trojanUrl = await config2trojan({ path: options.path, inboundTag: options.tag, address: options.address });
     if (!trojanUrl) { console.error('Failed to generate Trojan url'); process.exit(1); }
     console.log(trojanUrl);
   });

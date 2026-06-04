@@ -44,16 +44,17 @@ function streamSettingsToParams(streamSettings) {
 }
 
 // Build a Trojan share URL from a server-side inbound config
-function createTrojanUrl(inboundConfig) {
+function createTrojanUrl(inboundConfig, addressOverride) {
   const { port, settings, streamSettings } = inboundConfig;
   const tag = inboundConfig.tag ?? `trojan-${port}`;
   const [client] = settings?.clients ?? [];
   const password = client?.password;
   if (!password) throw new Error('Trojan inbound has no client password');
 
-  const address = inboundConfig.listen === '0.0.0.0' || !inboundConfig.listen
-    ? 'YOUR_SERVER_IP'
-    : inboundConfig.listen;
+  const address = addressOverride
+    || (inboundConfig.listen === '0.0.0.0' || !inboundConfig.listen
+      ? 'YOUR_SERVER_IP'
+      : inboundConfig.listen);
 
   const query = streamSettingsToParams(streamSettings);
   const fragment = encodeURIComponent(tag);
@@ -63,11 +64,12 @@ function createTrojanUrl(inboundConfig) {
 /**
  * Convert a v2ray server config file with a trojan inbound into a Trojan share URL.
  *
- * @param {{ path: string, inboundTag?: string }} options
+ * @param {{ path: string, inboundTag?: string, address?: string }} options
  *   path       - path to the server-side v2ray config.json
  *   inboundTag - optional tag to select a specific inbound (defaults to first trojan inbound)
+ *   address    - optional server address override (uses inbound.listen if omitted)
  */
-export default async function config2trojan({ path: filePath, inboundTag } = {}) {
+export default async function config2trojan({ path: filePath, inboundTag, address } = {}) {
   try {
     const absolute = path.resolve(process.cwd(), filePath);
     const configContent = await readFile(absolute, 'utf8');
@@ -78,7 +80,7 @@ export default async function config2trojan({ path: filePath, inboundTag } = {})
     );
     if (!inbound) throw new Error('No trojan inbound found in config');
 
-    return createTrojanUrl(inbound);
+    return createTrojanUrl(inbound, address);
   } catch (e) {
     return false;
   }

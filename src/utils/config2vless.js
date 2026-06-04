@@ -54,16 +54,17 @@ function streamSettingsToParams(streamSettings) {
 }
 
 // Build a VLESS share URL from a server-side inbound config
-function createVlessUrl(inboundConfig) {
+function createVlessUrl(inboundConfig, addressOverride) {
   const { port, settings, streamSettings } = inboundConfig;
   const tag = inboundConfig.tag ?? `vless-${port}`;
   const [client] = settings?.clients ?? [];
   const id = client?.id;
   if (!id) throw new Error('VLESS inbound has no client id');
 
-  const address = inboundConfig.listen === '0.0.0.0' || !inboundConfig.listen
-    ? 'YOUR_SERVER_IP'
-    : inboundConfig.listen;
+  const address = addressOverride
+    || (inboundConfig.listen === '0.0.0.0' || !inboundConfig.listen
+      ? 'YOUR_SERVER_IP'
+      : inboundConfig.listen);
 
   const query = streamSettingsToParams(streamSettings);
   const fragment = encodeURIComponent(tag);
@@ -73,11 +74,12 @@ function createVlessUrl(inboundConfig) {
 /**
  * Convert a v2ray server config file with a vless inbound into a VLESS share URL.
  *
- * @param {{ path: string, inboundTag?: string }} options
+ * @param {{ path: string, inboundTag?: string, address?: string }} options
  *   path       - path to the server-side v2ray config.json
  *   inboundTag - optional tag to select a specific inbound (defaults to first vless inbound)
+ *   address    - optional server address override (uses inbound.listen if omitted)
  */
-export default async function config2vless({ path: filePath, inboundTag } = {}) {
+export default async function config2vless({ path: filePath, inboundTag, address } = {}) {
   try {
     const absolute = path.resolve(process.cwd(), filePath);
     const configContent = await readFile(absolute, 'utf8');
@@ -88,7 +90,7 @@ export default async function config2vless({ path: filePath, inboundTag } = {}) 
     );
     if (!inbound) throw new Error('No vless inbound found in config');
 
-    return createVlessUrl(inbound);
+    return createVlessUrl(inbound, address);
   } catch (e) {
     return false;
   }
