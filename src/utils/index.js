@@ -5,3 +5,5 @@ export { default as trojan2config } from './trojan2config.js';
 export { default as config2vmess } from './config2vmess.js';
 export { default as config2vless } from './config2vless.js';
 export { default as config2trojan } from './config2trojan.js';
+export { default as config2shadowsocks } from './config2shadowsocks.js';
+export { default as config2hysteria2 } from './config2hysteria2.js';

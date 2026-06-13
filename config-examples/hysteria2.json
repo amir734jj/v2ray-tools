@@ -1,0 +1,22 @@
+{
+  "inbounds": [
+    {
+      "tag": "hy2-5678",
+      "listen": "0.0.0.0",
+      "port": 5678,
+      "protocol": "hysteria2",
+      "settings": {},
+      "streamSettings": {
+        "transport": "hysteria2",
+        "transportSettings": {
+          "password": "your-password-here"
+        }
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom"
+    }
+  ]
+}

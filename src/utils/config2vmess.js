@@ -9,7 +9,7 @@ const VMESS_PROTO = 'vmess://';
 function streamSettingsReverse(config) {
   let net = null, tls = null, host = null, type = null, path = null;
 
-  net = config?.network;
+  net = config?.network ?? config?.transport;
 
   if (config?.security === 'tls') {
     tls = 'tls';
@@ -33,12 +33,12 @@ function streamSettingsReverse(config) {
     path = quicSettings?.key
     type = quicSettings?.header?.type;
   } else if (net === 'tcp') {
-    const { tcpSettings } = config;
-    if (tcpSettings && tcpSettings.header && tcpSettings.header.type === 'http') {
-      type = tcpSettings.header.type;
-      const hostHeader = tcpSettings.header.request.headers.Host;
+    const tcpCfg = config?.tcpSettings ?? config?.transportSettings;
+    if (tcpCfg && tcpCfg.header && tcpCfg.header.type === 'http') {
+      type = tcpCfg.header.type;
+      const hostHeader = tcpCfg.header.request.headers.Host;
       host = Array.isArray(hostHeader) ? hostHeader[0] : hostHeader;
-      path = tcpSettings.header.request.path[0]
+      path = tcpCfg.header.request.path[0]
     }
   }
 

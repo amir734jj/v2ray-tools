@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
-import { findDefaultConfig, vmess2config, vless2config, trojan2config, config2vmess, config2vless, config2trojan } from '../utils/index.js';
+import { findDefaultConfig, vmess2config, vless2config, trojan2config, config2vmess, config2vless, config2trojan, config2shadowsocks, config2hysteria2 } from '../utils/index.js';
 
 const program = new Command();
 
@@ -94,6 +94,30 @@ program
     });
     if (!config) { console.error('Failed to convert Trojan url'); process.exit(1); }
     console.log(JSON.stringify(config, '', 2));
+  });
+
+program
+  .command('config2shadowsocks')
+  .description('convert v2ray server config file into shadowsocks SIP002 share url')
+  .requiredOption('-p, --path <path>', 'the path for the v2ray server config file')
+  .option('-t, --tag <tag>', 'inbound tag to select (defaults to first shadowsocks inbound)')
+  .option('-a, --address <address>', 'server address override (default: uses inbound listen)')
+  .action(async (options) => {
+    const ssUrl = await config2shadowsocks({ path: options.path, inboundTag: options.tag, address: options.address });
+    if (!ssUrl) { console.error('Failed to generate Shadowsocks url'); process.exit(1); }
+    console.log(ssUrl);
+  });
+
+program
+  .command('config2hysteria2')
+  .description('convert v2ray server config file into hysteria2 share url')
+  .requiredOption('-p, --path <path>', 'the path for the v2ray server config file')
+  .option('-t, --tag <tag>', 'inbound tag to select (defaults to first hysteria2 inbound)')
+  .option('-a, --address <address>', 'server address override (default: uses inbound listen)')
+  .action(async (options) => {
+    const hy2Url = await config2hysteria2({ path: options.path, inboundTag: options.tag, address: options.address });
+    if (!hy2Url) { console.error('Failed to generate Hysteria2 url'); process.exit(1); }
+    console.log(hy2Url);
   });
 
 program.parse();

@@ -7,7 +7,7 @@ const TROJAN_PROTO = 'trojan://';
 function streamSettingsToParams(streamSettings) {
   const params = new URLSearchParams();
 
-  const network = streamSettings?.network ?? 'tcp';
+  const network = streamSettings?.network ?? streamSettings?.transport ?? 'tcp';
   params.set('type', network);
 
   const security = streamSettings?.security ?? 'none';

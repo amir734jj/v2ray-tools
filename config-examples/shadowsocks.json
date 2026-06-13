@@ -1,0 +1,20 @@
+{
+  "inbounds": [
+    {
+      "tag": "ss-9388",
+      "listen": "0.0.0.0",
+      "port": 9388,
+      "protocol": "shadowsocks",
+      "settings": {
+        "method": "aes-256-gcm",
+        "password": "your-password-here",
+        "network": "tcp,udp"
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom"
+    }
+  ]
+}

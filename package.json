@@ -20,6 +20,8 @@
     "config2vmess": "node src/cli/index.js config2vmess",
     "config2vless": "node src/cli/index.js config2vless",
     "config2trojan": "node src/cli/index.js config2trojan",
+    "config2shadowsocks": "node src/cli/index.js config2shadowsocks",
+    "config2hysteria2": "node src/cli/index.js config2hysteria2",
     "vless2config": "node src/cli/index.js vless2config",
     "trojan2config": "node src/cli/index.js trojan2config",
     "test": "node --test tests/config2vmess.test.js tests/config2vless.test.js tests/config2trojan.test.js tests/vless2config.test.js tests/trojan2config.test.js tests/vmess2config.test.js tests/findDefaultConfig.test.js"

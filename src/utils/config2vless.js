@@ -7,7 +7,7 @@ const VLESS_PROTO = 'vless://';
 function streamSettingsToParams(streamSettings) {
   const params = new URLSearchParams();
 
-  const network = streamSettings?.network ?? 'tcp';
+  const network = streamSettings?.network ?? streamSettings?.transport ?? 'tcp';
   params.set('type', network);
 
   const security = streamSettings?.security ?? 'none';
@@ -39,7 +39,7 @@ function streamSettingsToParams(streamSettings) {
     if (http.path) params.set('path', http.path);
     if (http.host?.length) params.set('host', http.host[0]);
   } else if (network === 'tcp') {
-    const tcpHeader = streamSettings?.tcpSettings?.header;
+    const tcpHeader = streamSettings?.tcpSettings?.header ?? streamSettings?.transportSettings?.header;
     if (tcpHeader?.type === 'http') {
       params.set('headerType', 'http');
       const host = tcpHeader?.request?.headers?.Host;
