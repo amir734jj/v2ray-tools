@@ -221,7 +221,48 @@ npm run trojan2config -- --url <trojan-url>
 v2ray-tools trojan2config --url "trojan://password@1.2.3.4:443?type=tcp&security=tls#my-trojan"
 ```
 
+## JavaScript API
+
+```js
+import { createOutbound, createConnectionUrl } from 'v2ray-tools';
+
+const options = {
+  inbound: serverConfig.inbounds.find(item => item.tag === 'vmess-grpc'),
+  address: 'grpc.example.com',
+  port: 443,
+  tag: 'vmess-grpc',
+  streamSettings: {
+    network: 'grpc',
+    security: 'tls',
+    tlsSettings: { serverName: 'grpc.example.com' },
+    grpcSettings: { serviceName: 'vmess-grpc' },
+  },
+};
+
+const outbound = createOutbound(options);
+const shareUrl = createConnectionUrl(options);
+```
+
+These synchronous, in-memory functions accept a server `inbound` and a required
+public `address`. Optional `port`, `tag`, and `streamSettings` overrides default
+to the inbound values. Inputs are never mutated; the returned outbound owns its
+transport settings. No temporary config files are needed.
+
+Supported protocols are VLESS, VMess, Trojan, and Shadowsocks. The first client
+credential is used. Deployment-specific routing, observatory/balancer settings,
+and reverse-proxy topology remain the caller's responsibility.
+
+`createConnectionUrl` supports VMess gRPC service names and explicit TLS SNI.
+Shadowsocks TCP links remain plain SIP002 URLs; WebSocket links include
+`v2ray-plugin` settings (TLS when enabled, `mux=0`, host, and path). Native
+Shadowsocks gRPC has no portable share URL: `createOutbound` supports it but
+`createConnectionUrl` throws.
+
+Invalid inputs to these APIs throw descriptive errors. Existing async
+`config2*({ path, ... })` file APIs remain available and retain their `false`
+failure result. The VMess and Shadowsocks file converters also benefit from
+the gRPC/SNI and WebSocket-plugin encoding fixes, respectively.
+
 ## Credits
 
 Special thanks to [@AliSawari](https://github.com/AliSawari) for their fix PR: [#18](https://github.com/kltk/v2ray-tools/pull/18)
-

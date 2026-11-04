@@ -7,3 +7,4 @@ export { default as config2vless } from './config2vless.js';
 export { default as config2trojan } from './config2trojan.js';
 export { default as config2shadowsocks } from './config2shadowsocks.js';
 export { default as config2hysteria2 } from './config2hysteria2.js';
+export { createOutbound, createConnectionUrl } from './connection.js';

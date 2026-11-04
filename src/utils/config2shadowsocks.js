@@ -8,7 +8,7 @@ const SS_PROTO = 'ss://';
  *
  * Format: ss://base64url(method:password)@host:port#tag
  */
-function createShadowsocksUrl(inboundConfig, addressOverride) {
+export function createShadowsocksUrl(inboundConfig, addressOverride) {
   const { port, settings } = inboundConfig;
   const tag = inboundConfig.tag ?? `ss-${port}`;
   const method = settings?.method;
@@ -22,6 +22,25 @@ function createShadowsocksUrl(inboundConfig, addressOverride) {
 
   const userinfo = Buffer.from(`${method}:${password}`).toString('base64url');
   const fragment = encodeURIComponent(tag);
+  const network = inboundConfig.streamSettings?.network ?? inboundConfig.streamSettings?.transport ?? 'tcp';
+  if (network === 'grpc') {
+    throw new Error('Shadowsocks share URLs do not support native gRPC');
+  }
+  if (network === 'ws') {
+    const stream = inboundConfig.streamSettings;
+    const security = stream.security ?? 'none';
+    if (!['none', 'tls'].includes(security)) {
+      throw new Error(`Unsupported Shadowsocks WebSocket security: ${security}`);
+    }
+    const host = stream.wsSettings?.headers?.Host ?? stream.tlsSettings?.serverName ?? address;
+    const wsPath = stream.wsSettings?.path ?? '/';
+    if ([host, wsPath].some(value => typeof value !== 'string' || /[;\r\n]/.test(value))) {
+      throw new Error('Invalid v2ray-plugin host or path');
+    }
+    const plugin = ['v2ray-plugin', ...(security === 'tls' ? ['tls'] : []), 'mux=0', `host=${host}`, `path=${wsPath}`].join(';');
+    return `${SS_PROTO}${userinfo}@${address}:${port}/?${new URLSearchParams({ plugin })}#${fragment}`;
+  }
+  if (network !== 'tcp') throw new Error(`Unsupported Shadowsocks share URL transport: ${network}`);
   return `${SS_PROTO}${userinfo}@${address}:${port}#${fragment}`;
 }
 

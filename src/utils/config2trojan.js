@@ -44,7 +44,7 @@ function streamSettingsToParams(streamSettings) {
 }
 
 // Build a Trojan share URL from a server-side inbound config
-function createTrojanUrl(inboundConfig, addressOverride) {
+export function createTrojanUrl(inboundConfig, addressOverride) {
   const { port, settings, streamSettings } = inboundConfig;
   const tag = inboundConfig.tag ?? `trojan-${port}`;
   const [client] = settings?.clients ?? [];

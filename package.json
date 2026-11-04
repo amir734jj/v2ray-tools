@@ -3,7 +3,7 @@
   "version": "0.3.0",
   "description": "v2ray tools — convert between vmess/vless/trojan URLs and v2ray config files",
   "type": "module",
-  "main": "index.js",
+  "main": "./src/utils/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/amir734jj/v2ray-tools.git"
@@ -24,7 +24,7 @@
     "config2hysteria2": "node src/cli/index.js config2hysteria2",
     "vless2config": "node src/cli/index.js vless2config",
     "trojan2config": "node src/cli/index.js trojan2config",
-    "test": "node --test tests/config2vmess.test.js tests/config2vless.test.js tests/config2trojan.test.js tests/vless2config.test.js tests/trojan2config.test.js tests/vmess2config.test.js tests/findDefaultConfig.test.js"
+    "test": "node --test tests"
   },
   "keywords": [
     "v2ray",

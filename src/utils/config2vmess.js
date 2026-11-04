@@ -21,12 +21,15 @@ function streamSettingsReverse(config) {
     type = kcpSettings?.header?.type
   } else if (net === 'ws') {
     const { wsSettings } = config;
-    if (host) host = wsSettings?.headers?.Host;
+    if (wsSettings?.headers?.Host) host = wsSettings.headers.Host;
     if (wsSettings?.path) path = wsSettings?.path;
   } else if (net === 'h2') {
     const { httpSettings } = config;
     if (httpSettings?.host) host = httpSettings?.host?.join(',');
     path = httpSettings?.path;
+  } else if (net === 'grpc') {
+    path = config?.grpcSettings?.serviceName;
+    host = null;
   } else if (net === 'quic') {
     const { quicSettings } = config;
     host = quicSettings?.security
@@ -76,6 +79,9 @@ function createVmessObj(outboundConfig) {
     host: host || "",
     path: path || "none",
     tls: tls || "none",
+    ...(streamSettings?.security === 'tls' && streamSettings?.tlsSettings?.serverName
+      ? { sni: streamSettings.tlsSettings.serverName }
+      : {}),
     scy: scy
   }
 
@@ -83,7 +89,7 @@ function createVmessObj(outboundConfig) {
 }
 
 // craft a Base64 string out of Vmess Obj
-function createEncodedUrl(config) {
+export function createEncodedUrl(config) {
   const [outbound] = config.outbounds;
   if (outbound.protocol === 'vmess') {
     const vmessObj = createVmessObj(outbound);

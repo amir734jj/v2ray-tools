@@ -54,7 +54,7 @@ function streamSettingsToParams(streamSettings) {
 }
 
 // Build a VLESS share URL from a server-side inbound config
-function createVlessUrl(inboundConfig, addressOverride) {
+export function createVlessUrl(inboundConfig, addressOverride) {
   const { port, settings, streamSettings } = inboundConfig;
   const tag = inboundConfig.tag ?? `vless-${port}`;
   const [client] = settings?.clients ?? [];
@@ -67,8 +67,10 @@ function createVlessUrl(inboundConfig, addressOverride) {
       : inboundConfig.listen);
 
   const query = streamSettingsToParams(streamSettings);
+  const params = new URLSearchParams(query);
+  if (client.flow) params.set('flow', client.flow);
   const fragment = encodeURIComponent(tag);
-  return `${VLESS_PROTO}${id}@${address}:${port}?${query}#${fragment}`;
+  return `${VLESS_PROTO}${id}@${address}:${port}?${params}#${fragment}`;
 }
 
 /**
