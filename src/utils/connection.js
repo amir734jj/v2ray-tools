@@ -62,6 +62,7 @@ export function createOutbound({ inbound, address, port = inbound?.port, streamS
  * Encode a server inbound as a share URL entirely in memory.
  * Accepts the same public endpoint overrides as createOutbound; invalid input throws.
  * Shadowsocks supports TCP and WebSocket (v2ray-plugin), not native gRPC.
+ * Set options.client to 'v2rayng' for native Shadowsocks WebSocket share profiles.
  */
 export function createConnectionUrl(options) {
   const outbound = createOutbound(options);
@@ -79,5 +80,5 @@ export function createConnectionUrl(options) {
     trojan: createTrojanUrl,
     shadowsocks: createShadowsocksUrl,
   };
-  return converters[outbound.protocol](inbound, target.address);
+  return converters[outbound.protocol](inbound, target.address, { client: options.client });
 }

@@ -85,6 +85,18 @@ const shareUrl = createConnectionUrl(options);
 `address` is required. `port`, `tag`, and `streamSettings` override the inbound
 values. Inputs are not mutated.
 
+For current v2rayNG clients, pass `client: 'v2rayng'` to `createConnectionUrl`:
+
+```js
+const shareUrl = createConnectionUrl({ ...options, client: 'v2rayng' });
+```
+
+Shadowsocks over WebSocket is then encoded as a native `v2rayn://` profile,
+preserving TLS verification, SNI, Host, path, cipher, and password. v2rayNG's
+`ss://` importer ignores `v2ray-plugin` transport options. Other protocols and
+plain TCP Shadowsocks retain their existing URLs. Without this option,
+Shadowsocks WebSocket links remain SIP002 `ss://` links for plugin-aware clients.
+
 Supported protocols:
 
 - VLESS
@@ -109,6 +121,12 @@ const url = await config2vless({
 
 The in-memory APIs throw descriptive errors. For backward compatibility,
 legacy file-based `config2*` functions return `false` when conversion fails.
+
+`config2shadowsocks` also accepts `client: 'v2rayng'`. Its CLI equivalent is:
+
+```shell
+v2ray-tools config2shadowsocks --path server.json --address vpn.example.com --client v2rayng
+```
 
 ## Development
 

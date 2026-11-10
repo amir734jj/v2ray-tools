@@ -98,12 +98,13 @@ program
 
 program
   .command('config2shadowsocks')
-  .description('convert v2ray server config file into shadowsocks SIP002 share url')
+  .description('convert v2ray server config file into shadowsocks share url')
   .requiredOption('-p, --path <path>', 'the path for the v2ray server config file')
   .option('-t, --tag <tag>', 'inbound tag to select (defaults to first shadowsocks inbound)')
   .option('-a, --address <address>', 'server address override (default: uses inbound listen)')
+  .option('--client <client>', 'target client (v2rayng preserves WebSocket/TLS)')
   .action(async (options) => {
-    const ssUrl = await config2shadowsocks({ path: options.path, inboundTag: options.tag, address: options.address });
+    const ssUrl = await config2shadowsocks({ path: options.path, inboundTag: options.tag, address: options.address, client: options.client });
     if (!ssUrl) { console.error('Failed to generate Shadowsocks url'); process.exit(1); }
     console.log(ssUrl);
   });

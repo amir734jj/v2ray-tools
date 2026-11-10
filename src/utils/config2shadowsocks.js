@@ -4,11 +4,12 @@ import { readFile } from 'fs/promises';
 const SS_PROTO = 'ss://';
 
 /**
- * Build a Shadowsocks SIP002 share URL from a server-side inbound config.
+ * Build a Shadowsocks share URL from a server-side inbound config.
+ * v2rayNG WebSocket profiles use its native format to preserve transport settings.
  *
  * Format: ss://base64url(method:password)@host:port#tag
  */
-export function createShadowsocksUrl(inboundConfig, addressOverride) {
+export function createShadowsocksUrl(inboundConfig, addressOverride, { client } = {}) {
   const { port, settings } = inboundConfig;
   const tag = inboundConfig.tag ?? `ss-${port}`;
   const method = settings?.method;
@@ -37,6 +38,23 @@ export function createShadowsocksUrl(inboundConfig, addressOverride) {
     if ([host, wsPath].some(value => typeof value !== 'string' || /[;\r\n]/.test(value))) {
       throw new Error('Invalid v2ray-plugin host or path');
     }
+    if (client === 'v2rayng') {
+      const profile = {
+        IndexId: tag,
+        ConfigType: 3,
+        Remarks: tag,
+        Address: address,
+        Port: port,
+        Password: password,
+        Network: network,
+        StreamSecurity: security,
+        Sni: security === 'tls' ? stream.tlsSettings?.serverName ?? host : undefined,
+        AllowInsecure: String(security === 'tls' && stream.tlsSettings?.allowInsecure === true),
+        ProtoExtraObj: { SsMethod: method },
+        TransportExtraObj: { Host: host, Path: wsPath },
+      };
+      return `v2rayn://${Buffer.from(JSON.stringify(profile)).toString('base64url')}`;
+    }
     const plugin = ['v2ray-plugin', ...(security === 'tls' ? ['tls'] : []), 'mux=0', `host=${host}`, `path=${wsPath}`].join(';');
     return `${SS_PROTO}${userinfo}@${address}:${port}/?${new URLSearchParams({ plugin })}#${fragment}`;
   }
@@ -46,14 +64,15 @@ export function createShadowsocksUrl(inboundConfig, addressOverride) {
 
 /**
  * Convert a v2ray server config file with a shadowsocks inbound into a
- * Shadowsocks SIP002 share URL.
+ * Shadowsocks share URL.
  *
- * @param {{ path: string, inboundTag?: string, address?: string }} options
+ * @param {{ path: string, inboundTag?: string, address?: string, client?: string }} options
  *   path       - path to the server-side v2ray config.json
  *   inboundTag - optional tag to select a specific inbound (defaults to first shadowsocks inbound)
  *   address    - optional server address override (uses inbound.listen if omitted)
+ *   client     - 'v2rayng' preserves WebSocket/TLS in a native share profile
  */
-export default async function config2shadowsocks({ path: filePath, inboundTag, address } = {}) {
+export default async function config2shadowsocks({ path: filePath, inboundTag, address, client } = {}) {
   try {
     const absolute = path.resolve(process.cwd(), filePath);
     const configContent = await readFile(absolute, 'utf8');
@@ -64,7 +83,7 @@ export default async function config2shadowsocks({ path: filePath, inboundTag, a
     );
     if (!inbound) throw new Error('No shadowsocks inbound found in config');
 
-    return createShadowsocksUrl(inbound, address);
+    return createShadowsocksUrl(inbound, address, { client });
   } catch (e) {
     return false;
   }
