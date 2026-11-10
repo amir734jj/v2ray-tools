@@ -136,6 +136,9 @@ npm test
 npm run cli -- --help
 ```
 
+`npm test` uses Node.js's automatic test discovery. CI runs the suite on
+Node.js 22 and 24.
+
 ## License
 
 MIT

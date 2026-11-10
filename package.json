@@ -24,7 +24,7 @@
     "config2hysteria2": "node src/cli/index.js config2hysteria2",
     "vless2config": "node src/cli/index.js vless2config",
     "trojan2config": "node src/cli/index.js trojan2config",
-    "test": "node --test tests"
+    "test": "node --test"
   },
   "keywords": [
     "v2ray",
